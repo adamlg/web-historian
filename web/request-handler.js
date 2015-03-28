@@ -28,15 +28,17 @@ Router.get('/', function(req, res) {
   file.pipe(res)
 })
 
+
+
 Router.post('/', function(req, res) {
-  var file = fs.createWriteStream('archives/sites/sites.txt', {'flags': 'a'})
-  var postedURLString = req.url + '\n'
+  var file = fs.createWriteStream(archive.paths.list, {'flags': 'a'})
+  var body = ''
   req.on('data', function(chunk) {
-    file.write(chunk.toString())
+    body += chunk
   })
   req.on('end', function() {
-    file.write('\n')
-    file.end()
+    file.end(JSON.parse(body).url + '\n')
+    // file.end()
     res.writeHead(302, stat.headers)
     res.end()
     
