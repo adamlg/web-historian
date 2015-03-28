@@ -46,6 +46,20 @@ Router.post('/', function(req, res) {
 
 })
 
+Router.post('/url', function(req, res) {
+  var body = ''
+  req.on('data', function(chunk) {
+    body += chunk
+  })
+  req.on('end', function() {
+    // debugger
+    archive.downloadUrls([body.split('=')[1]])
+    res.writeHead(302, stat.headers)
+    res.end()
+    
+  })
+})
+
 exports.handleRequest = function (req, res) {
   if(routes[req.method]){
     if(routes[req.method][req.url]){
